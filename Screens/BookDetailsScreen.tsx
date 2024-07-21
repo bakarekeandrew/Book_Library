@@ -4,6 +4,7 @@ import { View, ScrollView, Image, StyleSheet } from 'react-native';
 import { Text, Button } from 'react-native-paper';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { BookContext } from '../context/BookContext';
+import { AntDesign } from '@expo/vector-icons';
 
 export default function BookDetailScreen(){
   const { books, deleteBook } = useContext(BookContext);
@@ -22,7 +23,7 @@ export default function BookDetailScreen(){
   };
 
   const handleEdit = () => {
-    navigation.navigate('AddEditBook', { bookId: book.id });
+    navigation.navigate('Add/Edit', { bookId: book.id });
   };
 
   return (
@@ -30,16 +31,32 @@ export default function BookDetailScreen(){
       {book.imageUri && (
         <Image source={{ uri: book.imageUri }} style={styles.image} />
       )}
-      <Text style={styles.title}>{book.title}</Text>
-      <Text style={styles.author}>{book.author}</Text>
-      <Text style={styles.rating}>Rating: {book.rating}/5</Text>
-      <Text style={styles.status}>{book.isRead ? 'Read' : 'Unread'}</Text>
-      <Text style={styles.description}>{book.description}</Text>
+      <View style={styles.contStatus}>
+        <Text style={styles.title}>Title: </Text>
+        <Text style={styles.theTitle}>{book.title}</Text> 
+      </View>
+      <View style={styles.contStatus}>
+         <Text style={styles.author}>Author: </Text>
+        <Text style={styles.theAuthor}> {book.author}</Text>
+      </View>
+      <View style={styles.contStatus}>
+        <Text style={styles.rating}>Rating: </Text>
+        <Text style={styles.theRating}>{book.rating}</Text>
+        <AntDesign name="staro" size={24} color="black" backgroundColor="orange"/>
+      </View>
+      <View style={styles.contStatus}>
+        <Text style={styles.status}>Status: </Text>
+        <Text style={styles.theStatus}> {book.isRead ? 'Read' : 'Unread'}</Text>
+      </View>
+      <View style={styles.contDescription}>
+        <Text style={styles.description}>Description: </Text>
+        <Text>{book.description}</Text>
+      </View>
       <View style={styles.buttonContainer}>
-        <Button mode="contained" onPress={handleEdit} style={styles.button}>
+        <Button mode="contained" onPress={handleEdit} style={[styles.button, styles.edit]}>
           Edit
         </Button>
-        <Button mode="contained" onPress={handleDelete} style={styles.button}>
+        <Button mode="contained" onPress={handleDelete} style={[styles.button, styles.delete]}>
           Delete
         </Button>
       </View>
@@ -62,25 +79,60 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 10,
   },
+  theTitle: {
+     paddingTop: 5,
+     fontSize: 18,
+  },
   author: {
     fontSize: 18,
+    fontWeight: 'bold',
     marginBottom: 10,
   },
   rating: {
     fontSize: 16,
+    fontWeight: 'bold',
     marginBottom: 5,
+  },
+  contStatus: {
+    flexDirection: 'row',
+    marginBottom: 5,
+    marginTop: 5,
   },
   status: {
     fontSize: 16,
+    fontWeight: 'bold',
     marginBottom: 10,
   },
-  description: {
-    fontSize: 16,
+  theStatus: {
+    paddingTop: 3,
+  },
+  theRating: {
+    paddingTop: 4,
+  },
+  theAuthor: {
+    paddingTop: 4,
+  },
+
+  contDescription: {
+    flexDirection: 'column',
+    marginTop: 5,
     marginBottom: 20,
+  },
+  description: {
+    fontWeight: 'bold',
+    fontSize: 20,
+    marginBottom: 10,
   },
   buttonContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+
+  },
+  edit: {
+    backgroundColor: 'orange',
+  },
+  delete: {
+    backgroundColor: '#880808',
   },
   button: {
     flex: 1,

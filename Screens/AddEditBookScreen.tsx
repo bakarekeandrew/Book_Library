@@ -1,4 +1,3 @@
-// src/screens/AddEditBookScreen.tsx
 import React, { useState, useContext, useEffect } from 'react';
 import { View, ScrollView, StyleSheet } from 'react-native';
 import { TextInput, Button, Switch, Text } from 'react-native-paper';

@@ -4,8 +4,8 @@ import { View, StyleSheet } from 'react-native';
 import { Text, Switch, RadioButton } from 'react-native-paper';
 import { storeData, getData } from '../utils/storage';
 
-export default function SettingsScreen(){
-  const [darkMode, setDarkMode] = useState(false);
+export default function SettingsScreen({ route }){
+  const [isDarkMode, setIsDarkMode] = route.parms;
   const [sortBy, setSortBy] = useState('title');
 
   useEffect(() => {
@@ -15,12 +15,12 @@ export default function SettingsScreen(){
   const loadSettings = async () => {
     const savedDarkMode = await getData('darkMode');
     const savedSortBy = await getData('sortBy');
-    if (savedDarkMode !== null) setDarkMode(savedDarkMode);
+    if (savedDarkMode !== null) setIsDarkMode(savedDarkMode);
     if (savedSortBy !== null) setSortBy(savedSortBy);
   };
 
   const handleDarkModeChange = (value: boolean) => {
-    setDarkMode(value);
+    setIsDarkMode(value);
     storeData('darkMode', value);
   };
 
@@ -33,7 +33,7 @@ export default function SettingsScreen(){
     <View style={styles.container}>
       <View style={styles.setting}>
         <Text>Dark Mode</Text>
-        <Switch value={darkMode} onValueChange={handleDarkModeChange} />
+        <Switch value={isDarkMode} onValueChange={handleDarkModeChange} />
       </View>
       <Text style={styles.sectionTitle}>Sort Books By:</Text>
       <RadioButton.Group onValueChange={handleSortByChange} value={sortBy}>
