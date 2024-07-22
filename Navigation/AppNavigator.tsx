@@ -1,6 +1,6 @@
 // src/navigation/AppNavigator.tsx
 import React from 'react';
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer, DefaultTheme, DarkTheme } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import HomeScreen from '../Screens/HomeScreen';
 import AddEditBookScreen from '../Screens/AddEditBookScreen';
@@ -8,6 +8,7 @@ import BookDetailScreen from '../Screens/BookDetailsScreen';
 import SettingsScreen from '../Screens/SettingsScreen';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
+import { useTheme } from '../context/ThemeProvider';
 
 
 
@@ -18,7 +19,7 @@ const HomeStack = ()=> {
 
   return (
     <Stack.Navigator>
-    <Stack.Screen name = "Home" component={HomeScreen} />
+    <Stack.Screen name = "Home" options={{headerShown: false}} component={HomeScreen} />
     <Stack.Screen name = "BookDetails" component={BookDetailScreen} />
   </Stack.Navigator>
   );
@@ -26,8 +27,10 @@ const HomeStack = ()=> {
 }
 
 export default function AppNavigator(){
+  const { isDarkMode } = useTheme();
+
   return (
-    <NavigationContainer>
+    <NavigationContainer theme={isDarkMode ? DarkTheme : DefaultTheme}>
       <Tab.Navigator
         screenOptions={({ route }) => ({
           tabBarIcon: ({ color, size }) => {

@@ -1,20 +1,22 @@
-// src/screens/BookDetailScreen.tsx
 import React, { useContext } from 'react';
 import { View, ScrollView, Image, StyleSheet } from 'react-native';
-import { Text, Button } from 'react-native-paper';
+import { Text, Button, useTheme } from 'react-native-paper';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { BookContext } from '../context/BookContext';
 import { AntDesign } from '@expo/vector-icons';
+import { useTheme as useCustomTheme } from '../context/ThemeProvider';
 
-export default function BookDetailScreen(){
+export default function BookDetailScreen() {
   const { books, deleteBook } = useContext(BookContext);
   const navigation = useNavigation();
   const route = useRoute();
   const bookId = route.params?.bookId;
   const book = books.find(b => b.id === bookId);
+  const { isDarkMode } = useCustomTheme();
+  const theme = useTheme();
 
   if (!book) {
-    return <Text>Book not found</Text>;
+    return <Text style={{ color: theme.colors.text }}>Book not found</Text>;
   }
 
   const handleDelete = async () => {
@@ -26,31 +28,34 @@ export default function BookDetailScreen(){
     navigation.navigate('Add/Edit', { bookId: book.id });
   };
 
+  const textColor = isDarkMode ? '#FFFFFF' : '#000000';
+  const backgroundColor = isDarkMode ? '#121212' : '#FFFFFF';
+
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView style={[styles.container, { backgroundColor }]}>
       {book.imageUri && (
         <Image source={{ uri: book.imageUri }} style={styles.image} />
       )}
       <View style={styles.contStatus}>
-        <Text style={styles.title}>Title: </Text>
-        <Text style={styles.theTitle}>{book.title}</Text> 
+        <Text style={[styles.title, { color: textColor }]}>Title: </Text>
+        <Text style={[styles.theTitle, { color: textColor }]}>{book.title}</Text> 
       </View>
       <View style={styles.contStatus}>
-         <Text style={styles.author}>Author: </Text>
-        <Text style={styles.theAuthor}> {book.author}</Text>
+         <Text style={[styles.author, { color: textColor }]}>Author: </Text>
+        <Text style={[styles.theAuthor, { color: textColor }]}> {book.author}</Text>
       </View>
       <View style={styles.contStatus}>
-        <Text style={styles.rating}>Rating: </Text>
-        <Text style={styles.theRating}>{book.rating}</Text>
-        <AntDesign name="staro" size={24} color="black" backgroundColor="orange"/>
+        <Text style={[styles.rating, { color: textColor }]}>Rating: </Text>
+        <Text style={[styles.theRating, { color: textColor }]}>{book.rating}</Text>
+        <AntDesign name="staro" size={24} color={textColor} />
       </View>
       <View style={styles.contStatus}>
-        <Text style={styles.status}>Status: </Text>
-        <Text style={styles.theStatus}> {book.isRead ? 'Read' : 'Unread'}</Text>
+        <Text style={[styles.status, { color: textColor }]}>Status: </Text>
+        <Text style={[styles.theStatus, { color: textColor }]}> {book.isRead ? 'Read' : 'Unread'}</Text>
       </View>
       <View style={styles.contDescription}>
-        <Text style={styles.description}>Description: </Text>
-        <Text>{book.description}</Text>
+        <Text style={[styles.description, { color: textColor }]}>Description: </Text>
+        <Text style={{ color: textColor }}>{book.description}</Text>
       </View>
       <View style={styles.buttonContainer}>
         <Button mode="contained" onPress={handleEdit} style={[styles.button, styles.edit]}>
@@ -62,7 +67,7 @@ export default function BookDetailScreen(){
       </View>
     </ScrollView>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -139,3 +144,4 @@ const styles = StyleSheet.create({
     marginHorizontal: 5,
   },
 });
+

@@ -1,11 +1,12 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { View, ScrollView, StyleSheet } from 'react-native';
-import { TextInput, Button, Switch, Text } from 'react-native-paper';
+import { TextInput, Button, Switch, Text, useTheme } from 'react-native-paper';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { BookContext } from '../context/BookContext';
 import * as ImagePicker from 'expo-image-picker';
+import { useTheme as useCustomTheme } from '../context/ThemeProvider';
 
-export default function AddEditBookScreen(){
+export default function AddEditBookScreen() {
   const [book, setBook] = useState({
     id: undefined,
     title: '',
@@ -18,6 +19,8 @@ export default function AddEditBookScreen(){
   const { addBook, updateBook, books } = useContext(BookContext);
   const navigation = useNavigation();
   const route = useRoute();
+  const { isDarkMode } = useCustomTheme();
+  const theme = useTheme();
 
   useEffect(() => {
     if (route.params?.bookId) {
@@ -48,19 +51,24 @@ export default function AddEditBookScreen(){
     }
   };
 
+  const textColor = isDarkMode ? '#FFFFFF' : '#000000';
+  const backgroundColor = isDarkMode ? '#121212' : '#FFFFFF';
+
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView style={[styles.container, { backgroundColor }]}>
       <TextInput
         label="Title"
         value={book.title}
         onChangeText={(text) => setBook({ ...book, title: text })}
         style={styles.input}
+        theme={{ colors: { text: textColor, primary: theme.colors.primary } }}
       />
       <TextInput
         label="Author"
         value={book.author}
         onChangeText={(text) => setBook({ ...book, author: text })}
         style={styles.input}
+        theme={{ colors: { text: textColor, primary: theme.colors.primary } }}
       />
       <TextInput
         label="Rating"
@@ -68,9 +76,10 @@ export default function AddEditBookScreen(){
         onChangeText={(text) => setBook({ ...book, rating: parseInt(text) || 0 })}
         keyboardType="numeric"
         style={styles.input}
+        theme={{ colors: { text: textColor, primary: theme.colors.primary } }}
       />
       <View style={styles.switchContainer}>
-        <Text>Read</Text>
+        <Text style={{ color: textColor }}>Read</Text>
         <Switch
           value={book.isRead}
           onValueChange={(value) => setBook({ ...book, isRead: value })}
@@ -82,16 +91,17 @@ export default function AddEditBookScreen(){
         onChangeText={(text) => setBook({ ...book, description: text })}
         multiline
         style={styles.input}
+        theme={{ colors: { text: textColor, primary: theme.colors.primary } }}
       />
       <Button mode="contained" onPress={pickImage} style={styles.button}>
         Pick an image
       </Button>
-      <Button mode="contained" onPress={handleSave} style={styles.button}>
+      <Button mode="contained" onPress={handleSave} style={[styles.button, styles.searchBtn]}>
         Save Book
       </Button>
     </ScrollView>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -109,5 +119,7 @@ const styles = StyleSheet.create({
   button: {
     marginTop: 10,
   },
+  searchBtn: {
+    backgroundColor: 'orange',
+  }
 });
-
