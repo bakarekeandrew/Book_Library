@@ -1,6 +1,6 @@
 import React, { useContext, useState, useEffect, useMemo } from 'react';
 import { View, FlatList, TouchableOpacity, StyleSheet, Animated } from 'react-native';
-import { Searchbar, FAB, Menu, Appbar, Text } from 'react-native-paper';
+import { Searchbar, FAB, Menu, Appbar, Text, useTheme as usePaperTheme } from 'react-native-paper';
 import { BookContext } from '../context/BookContext';
 import { useNavigation } from '@react-navigation/native';
 import { getData, storeData } from '../utils/storage';
@@ -15,6 +15,7 @@ export default function HomeScreen() {
   const [menuVisible, setMenuVisible] = useState(false);
   const navigation = useNavigation();
   const { isDarkMode } = useTheme();
+  const paperTheme = usePaperTheme();
   const [scaleAnim] = useState(new Animated.Value(1));
 
   useEffect(() => {
@@ -66,11 +67,12 @@ export default function HomeScreen() {
 
   const backgroundColor = isDarkMode ? '#121212' : '#FFFFFF';
   const textColor = isDarkMode ? '#FFFFFF' : '#000000';
+  const searchBackgroundColor = isDarkMode ? '#333333' : '#F0F0F0';
 
   return (
     <SafeAreaView style={[styles.container, { backgroundColor }]}>
       <View style={styles.header}>
-        <Animated.Text style={[styles.quote, { transform: [{ scale: scaleAnim }] }]}>
+        <Animated.Text style={[styles.quote, { transform: [{ scale: scaleAnim }], color: textColor }]}>
           "A reader lives a thousand lives before he dies."  George R.R. Martin
         </Animated.Text>
       </View>
@@ -86,20 +88,22 @@ export default function HomeScreen() {
               onPress={() => setMenuVisible(true)}
             />
           }
+          contentStyle={{ backgroundColor }}
         >
-          <Menu.Item onPress={() => handleSortByChange('title')} title="Sort by Title" />
-          <Menu.Item onPress={() => handleSortByChange('author')} title="Sort by Author" />
-          <Menu.Item onPress={() => handleSortByChange('rating')} title="Sort by Rating" />
+          <Menu.Item onPress={() => handleSortByChange('title')} title="Sort by Title" titleStyle={{ color: textColor }} />
+          <Menu.Item onPress={() => handleSortByChange('author')} title="Sort by Author" titleStyle={{ color: textColor }} />
+          <Menu.Item onPress={() => handleSortByChange('rating')} title="Sort by Rating" titleStyle={{ color: textColor }} />
         </Menu>
       </Appbar.Header>
       <Searchbar
-        style={styles.search}
+        style={[styles.search, { backgroundColor: searchBackgroundColor }]}
         placeholder="Search books"
         onChangeText={setSearchQuery}
         value={searchQuery}
         iconColor={textColor}
         placeholderTextColor={textColor}
         inputStyle={{ color: textColor }}
+        
       />
       <FlatList
         data={filteredAndSortedBooks}

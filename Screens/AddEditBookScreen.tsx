@@ -70,21 +70,21 @@ export default function AddEditBookScreen() {
         style={styles.input}
         theme={{ colors: { text: textColor, primary: theme.colors.primary } }}
       />
-      <TextInput
+      {/* <TextInput
         label="Rating"
         value={book.rating.toString()}
         onChangeText={(text) => setBook({ ...book, rating: parseInt(text) || 0 })}
         keyboardType="numeric"
         style={styles.input}
         theme={{ colors: { text: textColor, primary: theme.colors.primary } }}
-      />
-      <View style={styles.switchContainer}>
+      /> */}
+      {/* <View style={styles.switchContainer}>
         <Text style={{ color: textColor }}>Read</Text>
         <Switch
           value={book.isRead}
           onValueChange={(value) => setBook({ ...book, isRead: value })}
         />
-      </View>
+      </View> */}
       <TextInput
         label="Description"
         value={book.description}
@@ -121,5 +121,6 @@ const styles = StyleSheet.create({
   },
   searchBtn: {
     backgroundColor: 'orange',
+    marginTop: 20,
   }
 });

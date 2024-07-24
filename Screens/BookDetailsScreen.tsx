@@ -1,17 +1,17 @@
-import React, { useContext } from 'react';
-import { View, ScrollView, Image, StyleSheet } from 'react-native';
-import { Text, Button, useTheme } from 'react-native-paper';
+import React, { useContext, useState } from 'react';
+import { View, ScrollView, Image, StyleSheet, TouchableOpacity } from 'react-native';
+import { Text, Button, useTheme, Switch } from 'react-native-paper';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { BookContext } from '../context/BookContext';
 import { AntDesign } from '@expo/vector-icons';
 import { useTheme as useCustomTheme } from '../context/ThemeProvider';
 
 export default function BookDetailScreen() {
-  const { books, deleteBook } = useContext(BookContext);
+  const { books, deleteBook, updateBook } = useContext(BookContext);
   const navigation = useNavigation();
   const route = useRoute();
   const bookId = route.params?.bookId;
-  const book = books.find(b => b.id === bookId);
+  const [book, setBook] = useState(books.find(b => b.id === bookId));
   const { isDarkMode } = useCustomTheme();
   const theme = useTheme();
 
@@ -28,8 +28,39 @@ export default function BookDetailScreen() {
     navigation.navigate('Add/Edit', { bookId: book.id });
   };
 
+  const handleRatingChange = async (newRating) => {
+    const updatedBook = { ...book, rating: newRating };
+    await updateBook(updatedBook);
+    setBook(updatedBook);
+  };
+  const handleReadStatusChange = async (newStatus) => {
+    const updatedBook = { ...book, isRead: newStatus };
+    await updateBook(updatedBook);
+    setBook(updatedBook);
+  };
+
   const textColor = isDarkMode ? '#FFFFFF' : '#000000';
   const backgroundColor = isDarkMode ? '#121212' : '#FFFFFF';
+
+
+  const StarRating = () => {
+    return (
+      <View style={styles.starContainer}>
+        {[1, 2, 3, 4, 5].map((star) => (
+          <TouchableOpacity key={star} onPress={() => handleRatingChange(star)}>
+            <AntDesign
+              name={star <= book.rating ? "star" : "staro"}
+              size={24}
+              color={star <= book.rating ? "gold" : textColor}
+              style={styles.star}
+            />
+          </TouchableOpacity>
+        ))}
+      </View>
+    );
+  };
+  
+
 
   return (
     <ScrollView style={[styles.container, { backgroundColor }]}>
@@ -46,12 +77,23 @@ export default function BookDetailScreen() {
       </View>
       <View style={styles.contStatus}>
         <Text style={[styles.rating, { color: textColor }]}>Rating: </Text>
-        <Text style={[styles.theRating, { color: textColor }]}>{book.rating}</Text>
-        <AntDesign name="staro" size={24} color={textColor} />
+        {/* <Text style={[styles.theRating, { color: textColor }]}>{book.rating}</Text>
+        <AntDesign name="staro" size={24} color={textColor} /> */}
+        <StarRating />
       </View>
       <View style={styles.contStatus}>
-        <Text style={[styles.status, { color: textColor }]}>Status: </Text>
-        <Text style={[styles.theStatus, { color: textColor }]}> {book.isRead ? 'Read' : 'Unread'}</Text>
+        {/* <Text style={[styles.status, { color: textColor }]}>Status: </Text> */}
+        <View style={styles.statusToggleContainer}>
+          <Text style={[styles.statusText, { color: textColor }]}>
+            {book.isRead ? 'Read:' : 'Unread:'}
+          </Text>
+          <Switch
+            value={book.isRead}
+            onValueChange={handleReadStatusChange}
+            // color={theme.colors.primary}
+            color="orange"
+          />
+        </View>
       </View>
       <View style={styles.contDescription}>
         <Text style={[styles.description, { color: textColor }]}>Description: </Text>
@@ -98,6 +140,13 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 5,
   },
+  starContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  star: {
+    marginRight: 5,
+  },
   contStatus: {
     flexDirection: 'row',
     marginBottom: 5,
@@ -106,11 +155,27 @@ const styles = StyleSheet.create({
   status: {
     fontSize: 16,
     fontWeight: 'bold',
-    marginBottom: 10,
+    marginBottom: 5,
   },
-  theStatus: {
-    paddingTop: 3,
+  statusToggleContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    flex: 1,
+    justifyContent: 'flex-start',
   },
+  statusText: {
+    marginRight: 10,
+    fontSize: 16,
+    fontWeight: 'bold',
+  }, 
+  // status: {
+  //   fontSize: 16,
+  //   fontWeight: 'bold',
+  //   marginBottom: 10,
+  // },
+  // theStatus: {
+  //   paddingTop: 3,
+  // },
   theRating: {
     paddingTop: 4,
   },
