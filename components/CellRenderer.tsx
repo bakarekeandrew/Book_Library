@@ -1,8 +1,11 @@
-// src/components/CellRenderer.tsx
 import React from 'react';
 import { View, Text, Image, StyleSheet } from 'react-native';
+import { useTheme as useCustomTheme } from '../context/ThemeProvider';
+
 
 const CellRenderer = ({ title, author, rating, isRead, imageUri }) => {
+  const { isDarkMode } = useCustomTheme();
+
   const truncateText = (text, maxLength = 13) => {
     if (text.length > maxLength) {
       return text.slice(0, maxLength) + '...';
@@ -10,13 +13,14 @@ const CellRenderer = ({ title, author, rating, isRead, imageUri }) => {
     return text;
   };
 
+  const textColor = isDarkMode ? '#FFFFFF' : '#000000';
+  const backgroundColor = isDarkMode ? '#121212' : '#FFFFFF';
+
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor }]}>
       <Image source={{ uri: imageUri }} style={styles.image} />
-      <Text style={styles.title}>{truncateText(title)}</Text>
-      <Text style={styles.author}>{truncateText(author)}</Text>
-      {/* <Text style={styles.rating}>Rating: {rating}</Text> */}
-      {/* <Text style={styles.isRead}>{isRead ? 'Read' : 'Unread'}</Text> */}
+      <Text style={[styles.title, { color: textColor }]}>{truncateText(title)}</Text>
+      <Text style={[styles.author, { color: textColor }]}>{truncateText(author)}</Text>
     </View>
   );
 };
@@ -26,7 +30,6 @@ const styles = StyleSheet.create({
     flex: 1,
     margin: 3,
     padding: 10,
-    backgroundColor: '#fff',
     alignItems: 'center',
     borderRadius: 5,
     shadowColor: '#000',
@@ -50,17 +53,6 @@ const styles = StyleSheet.create({
   },
   author: {
     fontSize: 12,
-    color: 'gray',
-    textAlign: 'center',
-  },
-  rating: {
-    fontSize: 12,
-    color: 'tomato',
-    textAlign: 'center',
-  },
-  isRead: {
-    fontSize: 12,
-    color: 'green',
     textAlign: 'center',
   },
 });

@@ -76,12 +76,6 @@ export default function BookDetailScreen() {
         <Text style={[styles.theAuthor, { color: textColor }]}> {book.author}</Text>
       </View>
       <View style={styles.contStatus}>
-        <Text style={[styles.rating, { color: textColor }]}>Rating: </Text>
-        {/* <Text style={[styles.theRating, { color: textColor }]}>{book.rating}</Text>
-        <AntDesign name="staro" size={24} color={textColor} /> */}
-        <StarRating />
-      </View>
-      <View style={styles.contStatus}>
         {/* <Text style={[styles.status, { color: textColor }]}>Status: </Text> */}
         <View style={styles.statusToggleContainer}>
           <Text style={[styles.statusText, { color: textColor }]}>
@@ -94,6 +88,12 @@ export default function BookDetailScreen() {
             color="orange"
           />
         </View>
+      </View>
+      <View style={styles.contStatus}>
+        <Text style={[styles.rating, { color: textColor }]}>Rating: </Text>
+        {/* <Text style={[styles.theRating, { color: textColor }]}>{book.rating}</Text>
+        <AntDesign name="staro" size={24} color={textColor} /> */}
+        <StarRating />
       </View>
       <View style={styles.contDescription}>
         <Text style={[styles.description, { color: textColor }]}>Description: </Text>

@@ -26,8 +26,19 @@ export default function AddEditBookScreen() {
     if (route.params?.bookId) {
       const bookToEdit = books.find(b => b.id === route.params.bookId);
       if (bookToEdit) setBook(bookToEdit);
+    } else {
+      // Reset the book state when adding a new book
+      setBook({
+        id: undefined,
+        title: '',
+        author: '',
+        rating: 0,
+        isRead: false,
+        description: '',
+        imageUri: '',
+      });
     }
-  }, [route.params?.bookId]);
+  }, [route.params?.bookId, books]);
 
   const handleSave = async () => {
     if (book.id) {
@@ -70,21 +81,6 @@ export default function AddEditBookScreen() {
         style={styles.input}
         theme={{ colors: { text: textColor, primary: theme.colors.primary } }}
       />
-      {/* <TextInput
-        label="Rating"
-        value={book.rating.toString()}
-        onChangeText={(text) => setBook({ ...book, rating: parseInt(text) || 0 })}
-        keyboardType="numeric"
-        style={styles.input}
-        theme={{ colors: { text: textColor, primary: theme.colors.primary } }}
-      /> */}
-      {/* <View style={styles.switchContainer}>
-        <Text style={{ color: textColor }}>Read</Text>
-        <Switch
-          value={book.isRead}
-          onValueChange={(value) => setBook({ ...book, isRead: value })}
-        />
-      </View> */}
       <TextInput
         label="Description"
         value={book.description}
@@ -97,7 +93,7 @@ export default function AddEditBookScreen() {
         Pick an image
       </Button>
       <Button mode="contained" onPress={handleSave} style={[styles.button, styles.searchBtn]}>
-        Save Book
+        {book.id ? 'Update Book' : 'Add Book'}
       </Button>
     </ScrollView>
   );
