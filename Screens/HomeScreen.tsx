@@ -73,7 +73,7 @@ export default function HomeScreen() {
     <SafeAreaView style={[styles.container, { backgroundColor }]}>
       <View style={styles.header}>
         <Animated.Text style={[styles.quote, { transform: [{ scale: scaleAnim }], color: textColor }]}>
-          "A reader lives a thousand lives before he dies."  George R.R. Martin
+          we are presenting today with mR 
         </Animated.Text>
       </View>
       <Appbar.Header style={{ backgroundColor }}>
@@ -136,7 +136,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   header: {
-    backgroundColor: 'orange',
+    backgroundColor: 'red',
     padding: 20,
     marginHorizontal: 10,
     // marginTop: 10,
@@ -145,7 +145,7 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   quote: {
-    color: 'white',
+    color: 'orange',
     fontSize: 16,
     fontStyle: 'italic',
     textAlign: 'center',

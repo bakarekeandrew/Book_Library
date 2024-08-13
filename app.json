@@ -24,11 +24,11 @@
     "web": {
       "favicon": "./assets/favicon.png"
     },
+    "owner": "luckyandrew",
     "extra": {
       "eas": {
-        "projectId": "933b3f17-48f6-42dd-b966-bf979a07c6af"
+        "projectId": "33120fa1-21da-44f9-b81a-6dc33821bd69"
       }
-    },
-    "owner": "luckyandrew"
+    }
   }
 }
